@@ -1,9 +1,12 @@
-#!/usr/bin/env python3
 import sys
 import os
+from dotenv import load_dotenv
 
 # Ensure we can import atta package
 sys.path.append(os.getcwd())
+
+# Load environment variables from .env file
+load_dotenv()
 
 try:
     from atta.ui.menu import MainMenu

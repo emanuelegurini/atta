@@ -1,11 +1,12 @@
+import os
 import questionary
 import sys
 from atta.core.service import AttendanceService
 from atta.infra.config import ConfigManager
 from atta.ui import console
 
-# CONSTANT: The Public Sheet URL (Hardcoded for MVP as requested)
-SHEET_URL = "https://docs.google.com/spreadsheets/d/1MrJJuqdhv5apVzXwa1AT32XnD8t_amrJNNjkYm_pOyU/edit?usp=sharing"
+# CONSTANT: The Public Sheet URL (Loaded from .env)
+SHEET_URL = os.getenv("ATTA_SHEET_URL")
 
 class MainMenu:
     """
@@ -18,6 +19,10 @@ class MainMenu:
         
     def start(self):
         console.print_banner()
+        
+        if not SHEET_URL:
+            console.print_error("Configuration Error: ATTA_SHEET_URL not found in .env file.")
+            sys.exit(1)
         
         # Main Application Loop
         while True:
