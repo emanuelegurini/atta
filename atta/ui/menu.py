@@ -23,28 +23,32 @@ class MainMenu:
         if not SHEET_URL:
             console.print_error("Configuration Error: ATTA_SHEET_URL not found in .env file.")
             sys.exit(1)
+            
+        # Action Dispatch Map
+        actions = {
+            "📊 View My Stats": self._handle_view_stats,
+            "⚙️  Settings (Change ID)": self._handle_settings,
+            "❌ Exit": self._handle_exit
+        }
         
         # Main Application Loop
         while True:
             choice = questionary.select(
                 "What would you like to do?",
-                choices=[
-                    "📊 View My Stats",
-                    "⚙️  Settings (Change ID)",
-                    "❌ Exit"
-                ]
+                choices=list(actions.keys())
             ).ask()
             
             if choice is None: # Handle Ctrl+C
-                sys.exit(0)
+                self._handle_exit()
                 
-            if "View My Stats" in choice:
-                self._handle_view_stats()
-            elif "Settings" in choice:
-                self._handle_settings()
-            elif "Exit" in choice:
-                console.print_success("Bye! 👋")
-                sys.exit(0)
+            # Execute the selected action
+            handler = actions.get(choice)
+            if handler:
+                handler()
+
+    def _handle_exit(self):
+        console.print_success("Bye! 👋")
+        sys.exit(0)
 
     def _handle_view_stats(self):
         # 1. Get ID (from config or ask)
