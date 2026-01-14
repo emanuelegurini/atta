@@ -1,0 +1,5 @@
+pandas
+rich
+questionary
+requests
+pytest
