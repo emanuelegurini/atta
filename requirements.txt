@@ -3,3 +3,4 @@ rich
 questionary
 requests
 pytest
+python-dotenv
