@@ -47,9 +47,23 @@ class AttendanceService:
         row = student_row.iloc[0]
         
         # Calculate Logic
-        # 1. Identify Date Columns: All columns except 'Student_ID'
-        # We assume any other column is a date/lesson
-        date_columns = [col for col in df.columns if col != "Student_ID"]
+        # 1. Identify Date Columns:
+        # We enforce Strict Validation: Must match DD/MM/YYYY regex
+        import re
+        # Regex for DD/MM/YYYY (simple validation)
+        # \d{2} matches 01-31, \d{2} matches 01-12, \d{4} matches 2024...
+        date_pattern = re.compile(r"^\d{1,2}/\d{1,2}/\d{4}$")
+        
+        date_columns = []
+        for col in df.columns:
+            if col == "Student_ID":
+                continue
+            
+            if date_pattern.match(str(col).strip()):
+                date_columns.append(col)
+            else:
+                # Log or just ignore non-date columns (like 'Notes')
+                pass    
         
         total_lessons = 0
         present_count = 0
